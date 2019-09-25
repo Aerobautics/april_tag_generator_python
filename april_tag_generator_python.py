@@ -1,43 +1,49 @@
 #!/usr/bin/python
+import numpy as np
+import cv2
 
 def mainFunction():
 	maximumValue = 68719476735
 	mean = maximumValue // 2
-	displayMenu()
-	choice_string = input("Enter choice: ")
-	choice = int(choice_string)
-	if choice == 0:	
-		print(choice)
-	elif choice == 1:
-		print(choice)
-		temporary = generateArray(mean)
-		generateImageValues(temporary)
-	elif choice == 2:
-		print(choice)
-	elif choice == 3:
-		print(choice)
-	elif choice == 4:
-		print(choice)
-	elif choice == 5:
-		print(choice)
-	elif choice == 6:
-		print(choice)
-	elif choice == 7:
-		print(choice)
-	elif choice == 8:
-		print(choice)
-	elif choice == 9:
-		print(choice)
-	elif choice == 10:
-		print(choice)
-	elif choice == 11:
-		print(choice)
-	else:
-		print(choice)
+	choice = 12
+	while choice:
+		displayMenu()
+		choice_string = input("Enter choice: ")
+		choice = int(choice_string)
+		if choice == 0:	
+			print(choice)
+		elif choice == 1:
+			print(choice)
+			temporary = generateArray(mean)
+			temporary = generateImageValues(temporary)
+			generateImage(temporary)
+		elif choice == 2:
+			print(choice)
+		elif choice == 3:
+			print(choice)
+		elif choice == 4:
+			print(choice)
+		elif choice == 5:
+			print(choice)
+		elif choice == 6:
+			print(choice)
+		elif choice == 7:
+			print(choice)
+		elif choice == 8:
+			print(choice)
+		elif choice == 9:
+			print(choice)
+		elif choice == 10:
+			print(choice)
+		elif choice == 11:
+			print(choice)
+		else:
+			print(choice)
 	return
 	
 	
 def displayMenu():
+	print("----Menu----")
 	print("0. Exit")
 	print("1. Generate sequential images")
 	print("2. Change start value")
@@ -52,8 +58,11 @@ def displayMenu():
 	print("11. Help")
 	return
 	
-def generateImage():
+def generateImage(input_array):
 	print("generateImage()")
+	output = np.array(input_array, dtype = np.float32)
+	output = cv2.resize(output, (480, 480))
+	cv2.imshow('Apriltag', output)
 	return
 	
 def generateArray(tag_number):
