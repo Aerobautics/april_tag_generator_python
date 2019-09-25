@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 def mainFunction():
+	maximumValue = 68719476735
+	mean = maximumValue // 2
 	displayMenu()
 	choice_string = input("Enter choice: ")
 	choice = int(choice_string)
@@ -8,7 +10,8 @@ def mainFunction():
 		print(choice)
 	elif choice == 1:
 		print(choice)
-		generateArray(15439)
+		temporary = generateArray(mean)
+		generateImageValues(temporary)
 	elif choice == 2:
 		print(choice)
 	elif choice == 3:
@@ -30,7 +33,8 @@ def mainFunction():
 	elif choice == 11:
 		print(choice)
 	else:
-		print(choice)		
+		print(choice)
+	return
 	
 	
 def displayMenu():
@@ -46,9 +50,11 @@ def displayMenu():
 	print("9. Rotate")
 	print("10. Apply background")
 	print("11. Help")
+	return
 	
 def generateImage():
 	print("generateImage()")
+	return
 	
 def generateArray(tag_number):
 	print("generateArray()")
@@ -60,7 +66,7 @@ def generateArray(tag_number):
 	divisor = baseNumber
 	temporary = tag_number
 	for i in range(len(output)):
-		for j in range (len(output[i])):
+		for j in range(len(output[i])):
 			#print(temporary % divisor)
 			if temporary % divisor > 0:
 				output[i][j] = False
@@ -71,6 +77,46 @@ def generateArray(tag_number):
 		for element in row:
 			print(element, end = ' ')
 		print()
+	return output
+		
+def generateImageValues(boolean_array):
+	apriltagWidth = 10
+	apriltagHeight = 10
+	n = apriltagWidth
+	m = apriltagHeight
+	output = [[0] * m for i in range(n)]
+	for i in range(len(output)):
+		for j in range(len(output[i])):
+			onBorder = False
+			output[i][j] = 1.0
+			if i == 1 and j != 0 and j != apriltagWidth - 1:
+				output[i][j] = 0
+				onBorder = True
+			elif i == (apriltagWidth - 1) - 1 and j != 0 and j != apriltagWidth - 1:
+				output[i][j] = 0
+				onBorder = True
+			elif j == 1 and i != 0 and i != apriltagWidth - 1:
+				output[i][j] = 0
+				onBorder = True
+			elif j == (apriltagWidth - 1) - 1 and i != 0 and i != apriltagWidth - 1:
+				output[i][j] = 0
+				onBorder = True
+
+			if i == 0 or i == apriltagWidth - 1:
+				onBorder = True
+			elif j == 0 or j == apriltagWidth - 1:
+				onBorder = True
+				
+			if not onBorder:
+				if boolean_array[i - 2][j - 2]:
+					output[i][j] = 1.0
+				else:
+					output[i][j] = 0.0
+	for row in output:
+		for element in row:
+			print(element, end = ' ')
+		print()
+	return output
 
 if __name__ == "__main__":
 	mainFunction()	
