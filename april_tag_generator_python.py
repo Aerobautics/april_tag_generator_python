@@ -5,7 +5,12 @@ import cv2
 def mainFunction():
 	maximumValue = 68719476735
 	mean = maximumValue // 2
+	nominalValue = 2863311530
 	choice = 12
+	startValue = 0
+	endValue = 0
+	backgroundImage
+	angles
 	while choice:
 		displayMenu()
 		choice_string = input("Enter choice: ")
@@ -13,20 +18,24 @@ def mainFunction():
 		if choice == 0:	
 			print(choice)
 		elif choice == 1:
-			print(choice)
-			temporary = generateArray(mean)
-			temporary = generateImageValues(temporary)
-			generateImage(temporary)
+			for i in range(startValue, endValue):
+				temporary = generateArray(i)
+				temporary = generateImageValues(temporary)
+				generateImage(temporary)
 		elif choice == 2:
-			print(choice)
+			startValue = input('Enter start value: ')
+			startValue = int(startValue)
 		elif choice == 3:
-			print(choice)
+			endValue = input('Enter end value: ')
+			endValue = int(endValue)
 		elif choice == 4:
 			print(choice)
 		elif choice == 5:
 			print(choice)
 		elif choice == 6:
-			print(choice)
+			temporary = generateArray(nominalValue)
+			temporary = generateImageValues(temporary)
+			generateImage(temporary)
 		elif choice == 7:
 			print(choice)
 		elif choice == 8:
@@ -60,9 +69,25 @@ def displayMenu():
 	
 def generateImage(input_array):
 	print("generateImage()")
+	imageWidth = 480
+	maximumPixelStrength = 255
+	halfMaximumPixelStrength = 124	
 	output = np.array(input_array, dtype = np.float32)
-	output = cv2.resize(output, (480, 480))
+	a = output.shape[0]
+	b = output.shape[1]
+	output = np.multiply(output, maximumPixelStrength)
+	while a < imageWidth:
+		output = output.astype(np.float32)
+		output = np.multiply(output, 1.0 / maximumPixelStrength)
+		a *= 2
+		b *= 2
+		output = cv2.resize(output, (a, b))
+		output = np.multiply(output, maximumPixelStrength)  
+		output = np.rint(output)
+		output = output.astype(np.uint8)
+		retval, output = cv2.threshold(output, halfMaximumPixelStrength, maximumPixelStrength, cv2.THRESH_BINARY)
 	cv2.imshow('Apriltag', output)
+	cv2.waitKey(300)
 	return
 	
 def generateArray(tag_number):
@@ -76,16 +101,15 @@ def generateArray(tag_number):
 	temporary = tag_number
 	for i in range(len(output)):
 		for j in range(len(output[i])):
-			#print(temporary % divisor)
 			if temporary % divisor > 0:
 				output[i][j] = False
 			else:
 				output[i][j] = True
 			temporary = temporary // divisor
-	for row in output:
-		for element in row:
-			print(element, end = ' ')
-		print()
+	#for row in output:
+	#	for element in row:
+	#		print(element, end = ' ')
+	#	print()
 	return output
 		
 def generateImageValues(boolean_array):
