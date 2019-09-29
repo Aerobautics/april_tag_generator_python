@@ -6,7 +6,7 @@ def mainFunction():
 	maximumValue = 68719476735
 	mean = maximumValue // 2
 	nominalValue = 2863311530
-	deviation = 1000
+	deviation = mean // 2
 	numberOfImages = 1
 	choice = 255
 	startValue = 2863311530
@@ -33,13 +33,15 @@ def mainFunction():
 				for i in range(startValue, endValue):
 					temporary = generateArray(i)
 					temporary = generateImageValues(temporary)
-					generateImage(temporary, tagLength, imageSize, angles, backgroundImage, isBackgroundApplied)			
+					output = generateImage(temporary, tagLength, imageSize, angles, backgroundImage, isBackgroundApplied)
+					saveImage(output, filePath, fileName, i, angles)
 			else:
 				for j in range(len(angles)):
 					for i in range(startValue, endValue):
 						temporary = generateArray(i)
 						temporary = generateImageValues(temporary)
 						generateImage(temporary, tagLength, imageSize, angles[j], backgroundImage, isBackgroundApplied)
+						saveImage(output, filePath, fileName, i, angles[j])
 		elif choice == 2:
 			startValue = input('Enter start value: ')
 			startValue = int(startValue)
@@ -55,9 +57,19 @@ def mainFunction():
 			filePath = input('Enter new file path: ')
 			print('New file path: ', filePath)
 		elif choice == 6:
-			temporary = generateArray(nominalValue)
-			temporary = generateImageValues(temporary)
-			generateImage(temporary)
+			for i in range(0, numberOfImages):
+				k = np.random.normal(mean, deviation)
+				if angles == 0:
+					temporary = generateArray(k)
+					temporary = generateImageValues(temporary)
+					output = generateImage(temporary, tagLength, imageSize, angles, backgroundImage, isBackgroundApplied)
+					saveImage(output, filePath, fileName, k, angles)
+				else:
+					for j in range(len(angles)):
+						temporary = generateArray(k)
+						temporary = generateImageValues(temporary)
+						generateImage(temporary, tagLength, imageSize, angles[j], backgroundImage, isBackgroundApplied)
+						saveImage(output, filePath, fileName, k, angles[j])
 		elif choice == 7:
 			print('Current mean: ', mean)
 			mean = input('Enter new mean: ')
@@ -94,13 +106,19 @@ def mainFunction():
 					isBackgroundApplied = True
 				print('Background image on.')
 		elif choice == 12:
-			print(choice)
-		elif choice == 13:
 			print('Current background: ', backgroundFilename)
 			backgroundFilename = input('Enter new background image: ')
 			print('New background file: ', backgroundFilename)
+		elif choice == 13:
+			print('Current tag length: ', tagLength)
+			tagLength = input('Enter new tag length: ')
+			tagLength = int(tagLength)
+			print('New tag length: ', tagLength)
 		elif choice == 14:
-			print(choice)
+			print('Current image size: ', imageSize)
+			imageSize = input('Enter new image size: ')
+			imageSize = int(imageSize)
+			print('New image size: ', imageSize)
 		elif choice == 15:
 			printHelp()
 		elif choice == 16:
@@ -110,24 +128,27 @@ def mainFunction():
 	return	
 	
 def displayMenu():
-	print("----Menu----")
-	print("0. Exit")
-	print("1. Generate sequential images")
-	print("2. Change start value")
-	print("3. Change end value")
-	print("4. Change filename")
-	print("5. Change file path")
-	print("6. Generate normal images")
-	print("7. Change mean")
-	print("8. Change deviation")
-	print("9. Change number of images")
-	print("10. Rotation angles")
-	print("11. Apply/remove background")
-	print("12. Assign background image")
-	print("13. Adjust tag length")
-	print("14. Adjust image size")
-	print("15. Help")
-	print("16. Settings")
+	header = "-" * 40
+	print(header)
+	print("|>>>Menu<<<".ljust(39) + '|')
+	print("|0. Exit".ljust(39) + '|')
+	print("|1. Generate sequential images".ljust(39) + '|')
+	print("|2. Change start value".ljust(39) + '|')
+	print("|3. Change end value".ljust(39) + '|')
+	print("|4. Change filename".ljust(39) + '|')
+	print("|5. Change file path".ljust(39) + '|')
+	print("|6. Generate normal images".ljust(39) + '|')
+	print("|7. Change mean".ljust(39) + '|')
+	print("|8. Change deviation".ljust(39) + '|')
+	print("|9. Change number of images".ljust(39) + '|')
+	print("|10. Rotation angles".ljust(39) + '|')
+	print("|11. Apply/remove background".ljust(39) + '|')
+	print("|12. Assign background image".ljust(39) + '|')
+	print("|13. Adjust tag length".ljust(39) + '|')
+	print("|14. Adjust image size".ljust(39) + '|')
+	print("|15. Help".ljust(39) + '|')
+	print("|16. Settings".ljust(39) + '|')
+	print(header)
 	return
 	
 def generateImage(input_array, tag_width, image_width, image_angle, background_image, apply_background = False):
@@ -164,7 +185,7 @@ def generateImage(input_array, tag_width, image_width, image_angle, background_i
 	output = cv2.warpAffine(output, rotationMatrix, (image_width, image_width))
 	cv2.imshow('Apriltag', output)
 	cv2.waitKey(300)
-	return
+	return output
 	
 def generateArray(tag_number):
 	print("generateArray()")
@@ -226,6 +247,11 @@ def generateImageValues(boolean_array):
 			print(element, end = ' ')
 		print()
 	return output
+	
+def saveImage(image_array, file_path, file_name, image_number, image_rotation):
+	fileName = file_path + file_name + '_' + str(image_number) + '_' + str(image_rotation) + '.jpg'
+	cv2.imwrite(fileName, image_array)
+	
 
 def printHelp():
 	print("(0) Exit - Exit application")
@@ -244,6 +270,7 @@ def printHelp():
 	print("(13) Adjust tag lengt - Change the length of the Apriltag image")
 	print("(14) Adjust image size - Change the size of the image which contains the Apriltag")
 	print("(15) Help - Display information on selections")
+	print("(16) Settings - Display current settings")
 	
 if __name__ == "__main__":
 	mainFunction()	
