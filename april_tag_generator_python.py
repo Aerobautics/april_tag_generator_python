@@ -59,6 +59,7 @@ def mainFunction():
 		elif choice == 6:
 			for i in range(0, numberOfImages):
 				k = np.random.normal(mean, deviation)
+				k = int(k)
 				if angles == 0:
 					temporary = generateArray(k)
 					temporary = generateImageValues(temporary)
@@ -242,10 +243,6 @@ def generateImageValues(boolean_array):
 					output[i][j] = 1.0
 				else:
 					output[i][j] = 0.0
-	for row in output:
-		for element in row:
-			print(element, end = ' ')
-		print()
 	return output
 	
 def saveImage(image_array, file_path, file_name, image_number, image_rotation):
