@@ -40,7 +40,7 @@ def mainFunction():
 					for i in range(startValue, endValue):
 						temporary = generateArray(i)
 						temporary = generateImageValues(temporary)
-						generateImage(temporary, tagLength, imageSize, angles[j], backgroundImage, isBackgroundApplied)
+						output = generateImage(temporary, tagLength, imageSize, angles[j], backgroundImage, isBackgroundApplied)
 						saveImage(output, filePath, fileName, i, angles[j])
 		elif choice == 2:
 			startValue = input('Enter start value: ')
@@ -69,7 +69,7 @@ def mainFunction():
 					for j in range(len(angles)):
 						temporary = generateArray(k)
 						temporary = generateImageValues(temporary)
-						generateImage(temporary, tagLength, imageSize, angles[j], backgroundImage, isBackgroundApplied)
+						output = generateImage(temporary, tagLength, imageSize, angles[j], backgroundImage, isBackgroundApplied)
 						saveImage(output, filePath, fileName, k, angles[j])
 		elif choice == 7:
 			print('Current mean: ', mean)
